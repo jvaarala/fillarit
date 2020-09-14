@@ -1,18 +1,20 @@
 <template>
     <div id="app">
-        <Fillarit :results="this.results"/>
+        <Kartta :results="bikes"/>
     </div>
 </template>
 
 <script>
-    import Fillarit from './components/Fillarit.vue'
+    import Kartta from './components/Kartta.vue'
+    import {mapActions, mapGetters} from 'vuex'
 
     export default {
         name: 'App',
         components: {
-            Fillarit
+            Kartta
         },
         methods: {
+            ...mapActions(['fillBikes']),
             fetchApi() {
                 const myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
@@ -29,19 +31,23 @@
                 };
 
                 fetch("https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql", requestOptions)
-                    .then(response => response.text())
-                    .then(result => this.results = JSON.parse(result))
+                    .then(response => response.json())
+                    .then(result =>
+                    {
+                        //this.results = JSON.parse(result);
+                        this.fillBikes(result.data);
+                    }
+                    )
                     .catch(error => console.log('error', error));
             }
         },
-        mounted() {
-            this.stationData = this.fetchApi();
+        computed: {
+            ...mapGetters(['bikes'])
         },
-        data: function () {
-            return {
-                results: JSON
-            }
-        }
+        mounted() {
+            this.fetchApi();
+        },
+        meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
     }
 </script>
 
@@ -52,6 +58,5 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-        margin-top: 60px;
     }
 </style>
