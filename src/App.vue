@@ -32,11 +32,10 @@
 
                 fetch("https://api.digitransit.fi/routing/v1/routers/hsl/index/graphql", requestOptions)
                     .then(response => response.json())
-                    .then(result =>
-                    {
-                        //this.results = JSON.parse(result);
-                        this.fillBikes(result.data);
-                    }
+                    .then(result => {
+                            //this.results = JSON.parse(result);
+                            this.fillBikes(result.data);
+                        }
                     )
                     .catch(error => console.log('error', error));
             }
@@ -47,7 +46,7 @@
         mounted() {
             this.fetchApi();
         },
-        meta: [{ name: 'viewport', content: 'width=device-width, initial-scale=1' }]
+        meta: [{name: 'viewport', content: 'width=device-width, initial-scale=1'}]
     }
 </script>
 

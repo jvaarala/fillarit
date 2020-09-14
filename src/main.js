@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'leaflet/dist/leaflet.css';
 import store from "@/store";
-import { Icon } from 'leaflet';
+import {Icon} from 'leaflet';
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
@@ -15,15 +15,15 @@ Icon.Default.mergeOptions({
 });
 
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 // Install BootstrapVue
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 // Optionally install the BootstrapVue icon components plugin
-Vue.use(IconsPlugin)
+Vue.use(IconsPlugin);
 
 new Vue({
     store,
     render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');
 
 

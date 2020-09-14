@@ -61,7 +61,7 @@
 </script>
 
 <style scoped>
-    .vue2leaflet-map{
+    .vue2leaflet-map {
         z-index: 1;
     }
 </style>
