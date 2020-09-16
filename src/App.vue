@@ -35,7 +35,7 @@
             }
         },
         mounted() {
-            this.stationData = this.fetchApi();
+            this.fetchApi();
         },
         data: function () {
             return {
