@@ -48,7 +48,7 @@
                     redirect: 'follow'
                 };
 
-                const apiKey = "114332134ea7ed53cb7a0e88a863eb5d"
+                const apiKey = "***" // API KEY
                 fetch("https://api.openweathermap.org/data/2.5/weather?q=Helsinki&lang=fi&appid="+apiKey+"&units=metric", requestOptions)
                     .then(response => response.text())
                     .then(result => {this.fillWeather(JSON.parse(result))})
