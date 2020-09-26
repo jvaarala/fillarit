@@ -1,21 +1,24 @@
 <template>
     <div id="app">
+        <Saatila :weather="weather"/>
         <Kartta :results="bikes"/>
     </div>
 </template>
 
 <script>
-    import Kartta from './components/Kartta.vue'
+    import Kartta from '@/components/Kartta.vue'
+    import Saatila from "@/components/Saatila";
     import {mapActions, mapGetters} from 'vuex'
 
     export default {
         name: 'App',
         components: {
-            Kartta
+            Kartta,
+            Saatila
         },
         methods: {
-            ...mapActions(['fillBikes']),
-            fetchApi() {
+            ...mapActions(['fillBikes', 'fillWeather']),
+            fetchMapApi() {
                 const myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
 
@@ -38,15 +41,28 @@
                         }
                     )
                     .catch(error => console.log('error', error));
+            },
+            fetchWeatherApi() {
+                const requestOptions = {
+                    method: 'GET',
+                    redirect: 'follow'
+                };
+
+                const apiKey = "114332134ea7ed53cb7a0e88a863eb5d"
+                fetch("https://api.openweathermap.org/data/2.5/weather?q=Helsinki&lang=fi&appid="+apiKey+"&units=metric", requestOptions)
+                    .then(response => response.text())
+                    .then(result => {this.fillWeather(JSON.parse(result))})
+                    .catch(error => console.log('error', error));
             }
         },
         computed: {
-            ...mapGetters(['bikes'])
+            ...mapGetters(['bikes','weather'])
         },
         mounted() {
-            this.fetchApi();
+            this.fetchMapApi();
+            this.fetchWeatherApi();
         },
-        meta: [{name: 'viewport', content: 'width=device-width, initial-scale=1'}]
+        meta: [{name: 'viewport', content: 'width=device-width, initial-scale=1'}],
     }
 </script>
 
