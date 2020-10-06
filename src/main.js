@@ -6,6 +6,7 @@ import 'bootstrap-vue/dist/bootstrap-vue.css'
 import 'leaflet/dist/leaflet.css';
 import store from "@/store";
 import {Icon} from 'leaflet';
+require('@/assets/styles/main.css')
 
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({

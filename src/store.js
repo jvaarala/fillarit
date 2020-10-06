@@ -7,13 +7,18 @@ export default new Vuex.Store(
     {
         state: {
             bikes: [],
+            bikesReady: false,
             weather: {}
         },
         getters: {
             bikes: state => state.bikes,
+            bikesReady: state => state.bikesReady,
             weather: state => state.weather
         },
         mutations: {
+            SET_BIKES_READY(state, bikesReady) {
+                state.bikesReady = bikesReady;
+            },
             FILL_BIKES(state, bikes) {
                 state.bikes = bikes
             },
@@ -21,13 +26,5 @@ export default new Vuex.Store(
                 state.weather = weather
             }
         },
-        actions: {
-            fillBikes(ctx, bikes) {
-                ctx.commit('FILL_BIKES', bikes)
-            },
-            fillWeather(ctx, weather) {
-                ctx.commit('FILL_WEATHER', weather)
-            }
-        }
     }
 )

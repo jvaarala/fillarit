@@ -1,14 +1,14 @@
 <template>
     <div id="app">
         <Saatila :weather="weather"/>
-        <Kartta :results="bikes"/>
+        <Kartta :stations="this.bikes" :bikes-ready="this.$store.state.bikesReady" @getStationsEvent="handleGetStationsEvent" @emptyStationsEvent="handleEmptyStationsEvent"/>
     </div>
 </template>
 
 <script>
     import Kartta from '@/components/Kartta.vue'
     import Saatila from "@/components/Saatila";
-    import {mapActions, mapGetters} from 'vuex'
+    import {mapMutations, mapGetters} from 'vuex'
 
     export default {
         name: 'App',
@@ -17,8 +17,13 @@
             Saatila
         },
         methods: {
-            ...mapActions(['fillBikes', 'fillWeather']),
+            ...mapMutations([
+                'SET_BIKES_READY',
+                'FILL_BIKES',
+                'FILL_WEATHER',
+            ]),
             fetchMapApi() {
+                console.log('fetchMapApi')
                 const myHeaders = new Headers();
                 myHeaders.append("Content-Type", "application/json");
 
@@ -37,10 +42,13 @@
                     .then(response => response.json())
                     .then(result => {
                             //this.results = JSON.parse(result);
-                            this.fillBikes(result.data);
+                        console.log(result.data)
+                            this.FILL_BIKES(result.data);
                         }
-                    )
-                    .catch(error => console.log('error', error));
+                    ).finally(() => {
+                    console.log(this.bikes.bikeRentalStations)
+                    this.SET_BIKES_READY(true)
+                }).catch(error => console.log('error', error));
             },
             fetchWeatherApi() {
                 const requestOptions = {
@@ -53,14 +61,22 @@
                     .then(response => response.text())
                     .then(result => {this.fillWeather(JSON.parse(result))})
                     .catch(error => console.log('error', error));
-            }
+            },
+            handleEmptyStationsEvent() {
+                console.log('handleEmptyStationsEvent')
+                this.FILL_BIKES([])
+            },
+            handleGetStationsEvent() {
+                console.log('handlegGetStationsEvent')
+                this.fetchMapApi();
+            },
         },
         computed: {
-            ...mapGetters(['bikes','weather'])
+            ...mapGetters(['bikes','weather','bikesReady'])
         },
         mounted() {
+            //this.fetchWeatherApi();
             this.fetchMapApi();
-            this.fetchWeatherApi();
         },
         meta: [{name: 'viewport', content: 'width=device-width, initial-scale=1'}],
     }
